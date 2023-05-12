@@ -1,6 +1,6 @@
 ---
-title: "titulo"
-author: "nombres"
+title: "TP_1"
+author: "Alina Lopez"
 output: html_document
 ---
 
@@ -12,22 +12,181 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Introducción
+El presente informe utiliza como fuente de datos el dataset elaborado por el Gobierno de la Ciudad de Buenos Aires  referido a la encuesta de uso del tiempo.  Conforme a la publicación oficial,  esta encuesta capta información que permite aproximar a la dimensión de la economía del cuidado y servir de base para la estimación del valor económico del trabajo no remunerado. 
+Concretamente en relación al dataset, expresa la cantidad de horas diarias que los y las habitantes de la Ciudad de Buenos Aires le dedican a diferentes actividades, entre ellas: trabajo remunerado; labores domésticas; cuidado de niños, niñas; entre otros en el período 2016.  Es importante resaltar que los datos son de carácter público lo que redunda en la obtención de información de calidad y pertinencia conforme a la población objetivo.  
 
 
 
 ## Exploración de los datos
 
+```{r}
+library(readr)
+library(dplyr)
+
+
+```
+
+**Estructura de  los datos**
+```{r}
+usodeltiempo <- read_csv("datos/encuesta_uso_tiempo_2016.csv")
+
+
+```
 
 ```{r}
-# Código para cargar o leer los datos
+head(usodeltiempo)
+```
+
+El data  set cuenta con 2336 observaciones,  distribuidas en 27 columnas tales como edad,estudio, tareas de cuidado, trabajo pago, ocupación entre otras. Con el propósito de conocer algunas de las características descriptivas de la población encuestada,  se presenta a continuación los siguientes hallazgos:
+
+**Distribución de la población encuestada según sexo**
+```{r}
+usodeltiempo |> 
+  group_by(sexo) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+
+
+```
+Tal como lo muestra la información precedente, la población encuestada se compone de 1345 mujeres y 991 varones. 
+
+**Distribución por nivel educativo**
+A continuación se expresa cómo se distribuye la población por nivel educativo
+
+```{r}
+usodeltiempo |> 
+  group_by(nivel_educativo) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+
+
+```
+Es posible afirmar que la mayor parte de la población encuestada tiene cursados sus estudios de nivel secuendario, seguido por formación superior completa. 
+
+**Caracterizaciones por edad**
+
+En relación a la edad, es importante señalar que el dataset presenta información de dos maneras: las distribución de edades tal como fueron respondidas por las personas encuestadas y la distribución por intervalos.  Esto permite inferir que la base de datos tuvo un procedamiento previo con el propósito de facilitar el acceso a la información. A continuación se presentan los datos referidos a las edades de las personas encuestadas:
+
+
+
+```{r}
+usodeltiempo |> 
+  group_by(rango_etario) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+
+```
+
+Es decir que la mayor proporción de la población encuestada tiene entre 25 y 39 años de edad.  Asimismo de la información anterior se desprende que la edad mínima de la persona a encuestar es de 14 años.  No obstante, si se quiere saber la edad máxima es necesario procesar la información.
+
+```{r}
+usodeltiempo |>
+  summarise(max_edad = max(edad)) 
+
+
+
+```
+Es decir que la persona con mayor edad encuestada es del 97 años. 
+
+**Aspectos ocupacionales**
+
+```{r}
+usodeltiempo |> 
+  group_by(estado_ocupacional) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+
+```
+En relación a la condición de ocupación, la mayoria de la población tenía una ocupación laboral al momento de realizar la encuesta.
+
+
+**Ingreso de los hogares**
+
+Al intentar conocer acerca de la composición de los ingresos del hogar, la información arroja un resultado llamativo:
+
+```{r}
+usodeltiempo |> 
+   group_by(quintil_ingreso) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+```
+
+Es decir que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Quizá sea un error de procesamiento (o un error mío de comprensión)
+
+**Datos vinculados a la distribución de las tareas de cuidado al interior de los hogares**
+
+Según lo presentado en los párrafos anteriores, la encuesta de uso del tiempo se implementa con el propósito de conocer la distribución de las tareas de cuidado al interior de los hogares.  Asismismo se reitera que dicho relevamiento se llevo a cabo en la Ciudad Autónoma de Buenos Aires en el año 2016 y se toma como unidad de medida las horas requeridas para llevar a cabo tales tareas. En virtud de ello, se presenta a continuación algunos datos que permiten conocer dicha distribución:
+
+```{r}
+usodeltiempo |> 
+    group_by(sexo) |>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+
+
+
+
+```
+La tabulación anterior arroja un resultado un tanto llamativo en cuento a la distribución. No pareciera ser un dato válido que las mujeres destinen tan solo 1.5 hs a las tareas de cuidado.  Al observar visualmente el dataset se encuentran muchos datos en el valor "0" en dicha columna, lo que redunda en una significativa reducción del promedio.  Por ello, una alternativa posible es tomar los datos a partir del valor "1" para observar si se obtiene un resultado diferente:
+
+```{r}
+usodeltiempo |> 
+  group_by(sexo) |>
+  filter(tareas_cuidados >1)|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE)) 
+
+
+
+```
+El tabulado anterior expresa información más acertada en relación a la distribución de las tareas de cuidado.  Es importante manifestar la salvedad que no fueron tenidos en cuenta los casos que tienen valor "0" en esa variable. Asimismo, a continuación se presenta datos complementarios para tener una mirada de mayor integralidad.
+
+
+```{r}
+usodeltiempo |> 
+  group_by(sexo) |>
+  filter(voluntariados >1)|>
+  summarise(tiempo_prom_vol = mean(voluntariados, na.rm = TRUE)) 
+
+
+
+
+```
+```{r}
+usodeltiempo |> 
+    group_by(sexo) |>
+   filter(trabajo_pago >1)|>
+  summarise(tiempo_prom_pago = mean(trabajo_pago, na.rm = TRUE)) 
+
+
+
+
+```
+Tanto en las hs destinadas al trabajo remunerado como a las actividades voluntarias, no se observan diferencias significativas en relación a la distribución por sexo. En ambos casos, se tomo como referencia valores mayores o iguales a "1"
+
+Para finalizar se presenta la distribución de las responsabilidades de cuidado en forma graficada.  No se tomaron en cuenta otras distribuciones debido a la escasa diferencia entre los valores.
+
+
+
+```{r}
+library(ggplot2)
+
+usodeltiempo |> 
+  group_by(sexo) |>
+  filter(tareas_cuidados >1)|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))|> 
+ggplot(aes(sexo, tiempo_prom_cuid)) +
+  geom_col()
+
+
+
 ```
 
 
 
-```{r}
-# Cödigo de R acá 
-# Agregá más bloques según sea necesario
-```
 
 
 
