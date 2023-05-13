@@ -104,7 +104,7 @@ usodeltiempo |>
 En relación a la condición de ocupación, la mayoria de la población tenía una ocupación laboral al momento de realizar la encuesta.
 
 
-**Ingreso de los hogares**
+**Información referida a los hogares de las personas encuestadas**
 
 Al intentar conocer acerca de la composición de los ingresos del hogar, la información arroja un resultado llamativo:
 
@@ -117,6 +117,20 @@ usodeltiempo |>
 ```
 
 Es decir que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Quizá sea un error de procesamiento (o un error mío de comprensión)
+
+```{r}
+usodeltiempo |> 
+   group_by(tipo_hogar) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+
+
+```
+En cuanto a la composición de los hogares de las personas encuestadas, la gran mayoría vive en hogares con el nucleo familiar completo, seguido por personas que viven en hogares unipersonales. 
+
+
+
 
 **Datos vinculados a la distribución de las tareas de cuidado al interior de los hogares**
 
@@ -143,6 +157,17 @@ usodeltiempo |>
 
 ```
 El tabulado anterior expresa información más acertada en relación a la distribución de las tareas de cuidado.  Es importante manifestar la salvedad que no fueron tenidos en cuenta los casos que tienen valor "0" en esa variable. Asimismo, a continuación se presenta datos complementarios para tener una mirada de mayor integralidad.
+Si se toman la cantidad de horas dedidacas al trabajo doméstico no pago según sexo, se visualiza la siguiente relación:
+
+```{r}
+usodeltiempo |> 
+    group_by(sexo) |>
+  summarise(tiempo_prom_dom_nopag = mean(trabajo_domestico_no_pago, na.rm = TRUE))
+
+
+```
+En este caso en el dataset, no figuran tantos valores en "0" como en el caso anterior, por eso se mantiene. Conforme a la información anterior, en relación al tiempo promedio dedicado al trabajo doméstico no remunerado, las mujeres casi duplican la cantidad de horas en relación a los varones. 
+A continuación, se presenta información adicional a la distribución horaria. 
 
 
 ```{r}
@@ -167,9 +192,9 @@ usodeltiempo |>
 ```
 Tanto en las hs destinadas al trabajo remunerado como a las actividades voluntarias, no se observan diferencias significativas en relación a la distribución por sexo. En ambos casos, se tomo como referencia valores mayores o iguales a "1"
 
-Para finalizar se presenta la distribución de las responsabilidades de cuidado en forma graficada.  No se tomaron en cuenta otras distribuciones debido a la escasa diferencia entre los valores.
+Para finalizar se presenta la distribución de las responsabilidades de cuidado y trabajo doméstido en forma graficada.  No se tomaron en cuenta otras distribuciones debido a la escasa diferencia entre los valores.
 
-
+**Gráficos**
 
 ```{r}
 library(ggplot2)
@@ -185,11 +210,34 @@ ggplot(aes(sexo, tiempo_prom_cuid)) +
 
 ```
 
+```{r}
+usodeltiempo |> 
+  group_by(sexo) |>
+  summarise(tiempo_prom_dom_nopag = mean(trabajo_domestico_no_pago, na.rm = TRUE))|> 
+ggplot(aes(sexo, tiempo_prom_dom_nopag)) +
+  geom_col()
 
+
+
+
+```
 
 
 
 
 ## Hipótesis
+
+A modo de hipótesis, es posible plantear los siguientes interrogantes:
+
+¿Las mujeres jóvenes destinan en promedio mayor carga horaria a las tareas de cuidado que las mujeres adultas?¿y en relación al trabajo en el hogar no remunerado?
+
+
+La brecha en la distribución de las tareas de cuidado en relación al sexo se redujo en los últimos diez años? (se prevee tomar en cuenta el dataset de 2005)
+
+
+Las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado que las que trabajan menos horas?  Esta relación se mantiene para el caso de los varones?
+
+
+
 
 
