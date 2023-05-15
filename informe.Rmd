@@ -134,7 +134,7 @@ En cuanto a la composición de los hogares de las personas encuestadas, la gran 
 
 **Datos vinculados a la distribución de las tareas de cuidado al interior de los hogares**
 
-Según lo presentado en los párrafos anteriores, la encuesta de uso del tiempo se implementa con el propósito de conocer la distribución de las tareas de cuidado al interior de los hogares.  Asismismo se reitera que dicho relevamiento se llevo a cabo en la Ciudad Autónoma de Buenos Aires en el año 2016 y se toma como unidad de medida las horas requeridas para llevar a cabo tales tareas. En virtud de ello, se presenta a continuación algunos datos que permiten conocer dicha distribución:
+Según lo presentado en los párrafos anteriores, la encuesta de uso del tiempo se implementa con el propósito de conocer la distribución de las tareas de cuidado al interior de los hogares.  Asismismo se reitera que este relevamiento se llevo a cabo en la Ciudad Autónoma de Buenos Aires en el año 2016 y se toma como unidad de medida las horas requeridas para llevar a cabo tales tareas. En virtud de ello, se presenta a continuación algunos datos que permiten conocer dicha distribución:
 
 ```{r}
 usodeltiempo |> 
@@ -145,18 +145,18 @@ usodeltiempo |>
 
 
 ```
-La tabulación anterior arroja un resultado un tanto llamativo en cuento a la distribución. No pareciera ser un dato válido que las mujeres destinen tan solo 1.5 hs a las tareas de cuidado.  Al observar visualmente el dataset se encuentran muchos datos en el valor "0" en dicha columna, lo que redunda en una significativa reducción del promedio.  Por ello, una alternativa posible es tomar los datos a partir del valor "1" para observar si se obtiene un resultado diferente:
+La tabulación anterior arroja un resultado un tanto llamativo en cuento a la distribución. No pareciera ser un dato válido que las mujeres destinen tan solo 1.5 hs a las tareas de cuidado.  Al observar visualmente el dataset se encuentran muchos datos en el valor "0" en dicha columna, lo que redunda en una significativa reducción del promedio.  Por ello, una alternativa posible es tomar los datos mayores a ese valor para observar si se obtiene un resultado diferente:
 
 ```{r}
 usodeltiempo |> 
   group_by(sexo) |>
-  filter(tareas_cuidados >1)|>
+  filter(tareas_cuidados >0)|>
   summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE)) 
 
 
 
 ```
-El tabulado anterior expresa información más acertada en relación a la distribución de las tareas de cuidado.  Es importante manifestar la salvedad que no fueron tenidos en cuenta los casos que tienen valor "0" en esa variable. Asimismo, a continuación se presenta datos complementarios para tener una mirada de mayor integralidad.
+El tabulado anterior expresa información más acertada en relación a la distribución de las tareas de cuidado.  Es importante reiterar la salvedad que no fueron tenidos en cuenta los casos que tienen valor "0" en esa variable. Asimismo, a continuación se presenta datos complementarios para tener una mirada de mayor integralidad.
 Si se toman la cantidad de horas dedidacas al trabajo doméstico no pago según sexo, se visualiza la siguiente relación:
 
 ```{r}
@@ -166,14 +166,16 @@ usodeltiempo |>
 
 
 ```
-En este caso en el dataset, no figuran tantos valores en "0" como en el caso anterior, por eso se mantiene. Conforme a la información anterior, en relación al tiempo promedio dedicado al trabajo doméstico no remunerado, las mujeres casi duplican la cantidad de horas en relación a los varones. 
+
+Conforme a la información anterior, en relación al tiempo promedio dedicado al trabajo doméstico no remunerado, las mujeres casi duplican la cantidad de horas en relación a los varones. En este caso en el dataset, no figuran tantos valores en "0" como en el caso anterior, por eso se mantiene considerando todos los valores. 
+
 A continuación, se presenta información adicional a la distribución horaria. 
 
 
 ```{r}
 usodeltiempo |> 
   group_by(sexo) |>
-  filter(voluntariados >1)|>
+  filter(voluntariados >0)|>
   summarise(tiempo_prom_vol = mean(voluntariados, na.rm = TRUE)) 
 
 
@@ -183,14 +185,14 @@ usodeltiempo |>
 ```{r}
 usodeltiempo |> 
     group_by(sexo) |>
-   filter(trabajo_pago >1)|>
+   filter(trabajo_pago >0)|>
   summarise(tiempo_prom_pago = mean(trabajo_pago, na.rm = TRUE)) 
 
 
 
 
 ```
-Tanto en las hs destinadas al trabajo remunerado como a las actividades voluntarias, no se observan diferencias significativas en relación a la distribución por sexo. En ambos casos, se tomo como referencia valores mayores o iguales a "1"
+Tanto en las hs destinadas al trabajo remunerado como a las actividades voluntarias, no se observan diferencias significativas en relación a la distribución por sexo. En ambos casos, se tomo como referencia valores mayores a "0"
 
 Para finalizar se presenta la distribución de las responsabilidades de cuidado y trabajo doméstido en forma graficada.  No se tomaron en cuenta otras distribuciones debido a la escasa diferencia entre los valores.
 
@@ -201,7 +203,7 @@ library(ggplot2)
 
 usodeltiempo |> 
   group_by(sexo) |>
-  filter(tareas_cuidados >1)|>
+  filter(tareas_cuidados >0)|>
   summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))|> 
 ggplot(aes(sexo, tiempo_prom_cuid)) +
   geom_col()
