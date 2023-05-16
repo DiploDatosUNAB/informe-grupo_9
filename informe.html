@@ -536,12 +536,34 @@ distribución:</p>
 ## 1 Mujer             1.53
 ## 2 Varon             0.7</code></pre>
 <p>La tabulación anterior arroja un resultado un tanto llamativo en
-cuento a la distribución. No pareciera ser un dato válido que las
-mujeres destinen tan solo 1.5 hs a las tareas de cuidado. Al observar
-visualmente el dataset se encuentran muchos datos en el valor “0” en
-dicha columna, lo que redunda en una significativa reducción del
-promedio. Por ello, una alternativa posible es tomar los datos mayores a
-ese valor para observar si se obtiene un resultado diferente:</p>
+cuento a la distribución propuesta. No pareciera ser un dato válido que
+las mujeres destinen tan solo 1.5 horas a las tareas de cuidado. Por
+ello, es necesario conocer como está compuesta esa columna:</p>
+<pre class="r"><code>usodeltiempo |&gt; 
+  group_by(tareas_cuidados) |&gt; 
+  summarise(n = n()) |&gt; 
+  arrange(desc(n))</code></pre>
+<pre><code>## # A tibble: 129 × 2
+##    tareas_cuidados     n
+##              &lt;dbl&gt; &lt;int&gt;
+##  1             0    1801
+##  2             1      27
+##  3             4      23
+##  4             2      22
+##  5             3      22
+##  6             0.5    21
+##  7             1.5    17
+##  8             2.5    13
+##  9             3.5    13
+## 10             1.3    12
+## # ℹ 119 more rows</code></pre>
+<p>Conforme a la información precedente, se observa que la abrumdora
+mayoria de observaciones están en el valor “0”, lo que redunda en una
+significativa reducción del promedio. Esta situación puede deberse a que
+no se tiene el dato; o bien que la persona respondió que no le dedica
+horas a las tareas de cuidados. Frente a esta situación, una alternativa
+posible es tomar los datos mayores a ese valor para observar si se
+obtiene un resultado diferente:</p>
 <pre class="r"><code>usodeltiempo |&gt; 
   group_by(sexo) |&gt;
   filter(tareas_cuidados &gt;0)|&gt;
@@ -552,12 +574,17 @@ ese valor para observar si se obtiene un resultado diferente:</p>
 ## 1 Mujer             5.85
 ## 2 Varon             3.77</code></pre>
 <p>El tabulado anterior expresa información más acertada en relación a
-la distribución de las tareas de cuidado. Es importante reiterar la
-salvedad que no fueron tenidos en cuenta los casos que tienen valor “0”
-en esa variable. Asimismo, a continuación se presenta datos
-complementarios para tener una mirada de mayor integralidad. Si se toman
-la cantidad de horas dedidacas al trabajo doméstico no pago según sexo,
-se visualiza la siguiente relación:</p>
+la distribución de las tareas de cuidado. En efecto, en promedio las
+mujeres destinan mayor carga horaria en las tareas de cuidado de
+personas, 5,8 frente a 3,7 horas de los varones. No obstante, se
+reiterar la aclaración que no fueron tenidos en cuenta los casos que
+tienen valor “0” en esa variable y que dichos casos representan 1801 de
+2336 observaciones, reduciendo considerablemente la muestra
+tomada.<br />
+Por ello, resulta importante complementar la información obtenida con
+otros análisis para tener una mirada de mayor integralidad.</p>
+<p>De hecho, si se toman la cantidad de horas dedidacas al trabajo
+doméstico no pago según sexo, se visualiza la siguiente relación:</p>
 <pre class="r"><code>usodeltiempo |&gt; 
     group_by(sexo) |&gt;
   summarise(tiempo_prom_dom_nopag = mean(trabajo_domestico_no_pago, na.rm = TRUE))</code></pre>
@@ -570,9 +597,68 @@ se visualiza la siguiente relación:</p>
 dedicado al trabajo doméstico no remunerado, las mujeres casi duplican
 la cantidad de horas en relación a los varones. En este caso en el
 dataset, no figuran tantos valores en “0” como en el caso anterior, por
-eso se mantiene considerando todos los valores.</p>
-<p>A continuación, se presenta información adicional a la distribución
-horaria.</p>
+eso se mantiene considerando todos los valores:</p>
+<pre class="r"><code>usodeltiempo |&gt; 
+  group_by(trabajo_domestico_no_pago) |&gt; 
+  summarise(n = n()) |&gt; 
+  arrange(desc(n))</code></pre>
+<pre><code>## # A tibble: 116 × 2
+##    trabajo_domestico_no_pago     n
+##                        &lt;dbl&gt; &lt;int&gt;
+##  1                       0     258
+##  2                       0.5   112
+##  3                       0.3    94
+##  4                       1      91
+##  5                       0.2    79
+##  6                       1.3    76
+##  7                       0.8    71
+##  8                       1.5    70
+##  9                       2      66
+## 10                       2.5    58
+## # ℹ 106 more rows</code></pre>
+<p>Se si analizan los datos vinculados a la carga horaria destinada a
+labores de voluntarias y las de trabajo remunerado se obtiene la
+siguiente información:</p>
+<pre class="r"><code>usodeltiempo |&gt; 
+  group_by(voluntariados) |&gt; 
+  summarise(n = n()) |&gt; 
+  arrange(desc(n))</code></pre>
+<pre><code>## # A tibble: 69 × 2
+##    voluntariados     n
+##            &lt;dbl&gt; &lt;int&gt;
+##  1           0    2106
+##  2           1      18
+##  3           1.5    16
+##  4           2      14
+##  5           4      13
+##  6           3      11
+##  7           5      11
+##  8           2.5    10
+##  9           5.5     9
+## 10           0.8     8
+## # ℹ 59 more rows</code></pre>
+<pre class="r"><code>usodeltiempo |&gt; 
+  group_by(trabajo_pago) |&gt; 
+  summarise(n = n()) |&gt; 
+  arrange(desc(n))</code></pre>
+<pre><code>## # A tibble: 140 × 2
+##    trabajo_pago     n
+##           &lt;dbl&gt; &lt;int&gt;
+##  1          0    1162
+##  2          9      46
+##  3          8      40
+##  4          8.8    37
+##  5          9.5    34
+##  6          8.5    29
+##  7          9.8    29
+##  8          7      28
+##  9          8.3    28
+## 10          9.3    27
+## # ℹ 130 more rows</code></pre>
+<p>Tanto en las hs destinadas al trabajo remunerado como a las
+actividades voluntarias, se observa nuevamente la mayoria de
+observaciones bajo el valor cero. Por ello, se toma la misma decisión
+anteriormente expresada.</p>
 <pre class="r"><code>usodeltiempo |&gt; 
   group_by(sexo) |&gt;
   filter(voluntariados &gt;0)|&gt;
@@ -591,10 +677,14 @@ horaria.</p>
 ##   &lt;chr&gt;            &lt;dbl&gt;
 ## 1 Mujer             8.01
 ## 2 Varon             8.86</code></pre>
-<p>Tanto en las hs destinadas al trabajo remunerado como a las
-actividades voluntarias, no se observan diferencias significativas en
-relación a la distribución por sexo. En ambos casos, se tomo como
-referencia valores mayores a “0”</p>
+<p>De acuerdo a la información precedente, no se observan diferencias
+significativas en relación a la distribución por sexo.</p>
+<p>Concretamente en relación a los datos, se considera que la
+información presentada resulta útil para visualizar las diferencias en
+cuanto a la distribuciones de las tareas vinculadas a la economía del
+cuidado, pero es igual de importante explicitar cuáles fueron las
+decisiones que se fueron tomando durante el procesamiento de la
+información para realizar dichas conclusiones.</p>
 <p>Para finalizar se presenta la distribución de las responsabilidades
 de cuidado y trabajo doméstido en forma graficada. No se tomaron en
 cuenta otras distribuciones debido a la escasa diferencia entre los
