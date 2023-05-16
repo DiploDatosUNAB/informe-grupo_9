@@ -427,8 +427,9 @@ sexo</strong></p>
 ## 2 Varon   991</code></pre>
 <p>Tal como lo muestra la información precedente, la población
 encuestada se compone de 1345 mujeres y 991 varones.</p>
-<p><strong>Distribución por nivel educativo</strong> A continuación se
-expresa cómo se distribuye la población por nivel educativo</p>
+<p><strong>Distribución por nivel educativo</strong></p>
+<p>A continuación se expresa cómo se distribuye la población por nivel
+educativo</p>
 <pre class="r"><code>usodeltiempo |&gt; 
   group_by(nivel_educativo) |&gt; 
   summarise(n = n()) |&gt; 
@@ -463,11 +464,11 @@ edades de las personas encuestadas:</p>
 ## 3 50-64          521
 ## 4 40-49          307
 ## 5 14-24          291</code></pre>
-<p>Es decir que la mayor proporción de la población encuestada tiene
-entre 25 y 39 años de edad. Asimismo de la información anterior se
-desprende que la edad mínima de la persona a encuestar es de 14 años. No
-obstante, si se quiere saber la edad máxima es necesario procesar la
-información.</p>
+<p>La mayor proporción de la población encuestada tiene entre 25 y 39
+años de edad. Asimismo de la información anterior se desprende que la
+edad mínima de la persona a encuestar es de 14 años. No obstante, si se
+quiere saber la edad máxima es necesario procesar la información como se
+detalla más abajo.</p>
 <pre class="r"><code>usodeltiempo |&gt;
   summarise(max_edad = max(edad)) </code></pre>
 <pre><code>## # A tibble: 1 × 1
@@ -500,9 +501,9 @@ hogar, la información arroja un resultado llamativo:</p>
 ##   quintil_ingreso     n
 ##   &lt;chr&gt;           &lt;int&gt;
 ## 1 5to quintil      2336</code></pre>
-<p>Es decir que todas las personas encuestadas manifiestan tener
+<p>Resulta extraño que todas las personas encuestadas manifiestan tener
 ingresos que refieren al quinto quintil. Quizá sea un error de
-procesamiento (o un error mío de comprensión)</p>
+procesamiento (o un error mío de comprensión).</p>
 <pre class="r"><code>usodeltiempo |&gt; 
    group_by(tipo_hogar) |&gt; 
   summarise(n = n()) |&gt; 
@@ -521,7 +522,7 @@ completo, seguido por personas que viven en hogares unipersonales.</p>
 al interior de los hogares</strong></p>
 <p>Según lo presentado en los párrafos anteriores, la encuesta de uso
 del tiempo se implementa con el propósito de conocer la distribución de
-las tareas de cuidado al interior de los hogares. Asismismo se reitera
+las tareas de cuidado al interior de los hogares. Asimismo se reitera
 que este relevamiento se llevo a cabo en la Ciudad Autónoma de Buenos
 Aires en el año 2016 y se toma como unidad de medida las horas
 requeridas para llevar a cabo tales tareas. En virtud de ello, se
@@ -575,14 +576,14 @@ obtiene un resultado diferente:</p>
 ## 2 Varon             3.77</code></pre>
 <p>El tabulado anterior expresa información más acertada en relación a
 la distribución de las tareas de cuidado. En efecto, en promedio las
-mujeres destinan mayor carga horaria en las tareas de cuidado de
-personas, 5,8 frente a 3,7 horas de los varones. No obstante, se
-reiterar la aclaración que no fueron tenidos en cuenta los casos que
+mujeres encuestadas destinan mayor carga horaria en las tareas de
+cuidado de personas, 5,8 frente a 3,7 horas de los varones. No obstante,
+se reitera la aclaración que no fueron tenidos en cuenta los casos que
 tienen valor “0” en esa variable y que dichos casos representan 1801 de
-2336 observaciones, reduciendo considerablemente la muestra
-tomada.<br />
-Por ello, resulta importante complementar la información obtenida con
-otros análisis para tener una mirada de mayor integralidad.</p>
+2336 observaciones, reduciendo considerablemente la muestra de donde se
+extrajo esa información.<br />
+Por ello, resulta importante complementar los datos obtenidos con otros
+análisis para tener una mirada de mayor integralidad.</p>
 <p>De hecho, si se toman la cantidad de horas dedidacas al trabajo
 doméstico no pago según sexo, se visualiza la siguiente relación:</p>
 <pre class="r"><code>usodeltiempo |&gt; 
@@ -616,9 +617,9 @@ eso se mantiene considerando todos los valores:</p>
 ##  9                       2      66
 ## 10                       2.5    58
 ## # ℹ 106 more rows</code></pre>
-<p>Se si analizan los datos vinculados a la carga horaria destinada a
-labores de voluntarias y las de trabajo remunerado se obtiene la
-siguiente información:</p>
+<p>Si se analizan los datos vinculados a la carga horaria destinada a
+labores voluntarias y las de trabajo remunerado se obtiene la siguiente
+información:</p>
 <pre class="r"><code>usodeltiempo |&gt; 
   group_by(voluntariados) |&gt; 
   summarise(n = n()) |&gt; 
@@ -655,7 +656,7 @@ siguiente información:</p>
 ##  9          8.3    28
 ## 10          9.3    27
 ## # ℹ 130 more rows</code></pre>
-<p>Tanto en las hs destinadas al trabajo remunerado como a las
+<p>Tanto en las horass destinadas al trabajo remunerado como a las
 actividades voluntarias, se observa nuevamente la mayoria de
 observaciones bajo el valor cero. Por ello, se toma la misma decisión
 anteriormente expresada.</p>
@@ -678,7 +679,9 @@ anteriormente expresada.</p>
 ## 1 Mujer             8.01
 ## 2 Varon             8.86</code></pre>
 <p>De acuerdo a la información precedente, no se observan diferencias
-significativas en relación a la distribución por sexo.</p>
+significativas en relación a la distribución por sexo en cuanto al
+tiempo promedio de horas dedicadas al trabajo remunerado y labores
+voluntarias.</p>
 <p>Concretamente en relación a los datos, se considera que la
 información presentada resulta útil para visualizar las diferencias en
 cuanto a la distribuciones de las tareas vinculadas a la economía del
@@ -718,7 +721,7 @@ sexo se redujo en los últimos diez años? (se prevee tomar en cuenta el
 dataset de 2005)</p>
 <p>Las mujeres que trabajan mayor cantidad de hs en el mercado destinan
 menor cantidad de hs a a las tareas de cuidado que las que trabajan
-menos horas? Esta relación se mantiene para el caso de los varones?</p>
+menos horas? ¿Esta relación se mantiene para el caso de los varones?</p>
 </div>
 
 

@@ -52,6 +52,7 @@ usodeltiempo |>
 Tal como lo muestra la información precedente, la población encuestada se compone de 1345 mujeres y 991 varones. 
 
 **Distribución por nivel educativo**
+
 A continuación se expresa cómo se distribuye la población por nivel educativo
 
 ```{r}
@@ -80,7 +81,7 @@ usodeltiempo |>
 
 ```
 
-Es decir que la mayor proporción de la población encuestada tiene entre 25 y 39 años de edad.  Asimismo de la información anterior se desprende que la edad mínima de la persona a encuestar es de 14 años.  No obstante, si se quiere saber la edad máxima es necesario procesar la información.
+La mayor proporción de la población encuestada tiene entre 25 y 39 años de edad.  Asimismo de la información anterior se desprende que la edad mínima de la persona a encuestar es de 14 años.  No obstante, si se quiere saber la edad máxima es necesario procesar la información como se detalla más abajo.
 
 ```{r}
 usodeltiempo |>
@@ -116,7 +117,7 @@ usodeltiempo |>
 
 ```
 
-Es decir que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Quizá sea un error de procesamiento (o un error mío de comprensión)
+Resulta extraño que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Quizá sea un error de procesamiento (o un error mío de comprensión).
 
 ```{r}
 usodeltiempo |> 
@@ -134,7 +135,7 @@ En cuanto a la composición de los hogares de las personas encuestadas, la gran 
 
 **Datos vinculados a la distribución de las tareas de cuidado al interior de los hogares**
 
-Según lo presentado en los párrafos anteriores, la encuesta de uso del tiempo se implementa con el propósito de conocer la distribución de las tareas de cuidado al interior de los hogares.  Asismismo se reitera que este relevamiento se llevo a cabo en la Ciudad Autónoma de Buenos Aires en el año 2016 y se toma como unidad de medida las horas requeridas para llevar a cabo tales tareas. En virtud de ello, se presenta a continuación algunos datos que permiten conocer dicha distribución:
+Según lo presentado en los párrafos anteriores, la encuesta de uso del tiempo se implementa con el propósito de conocer la distribución de las tareas de cuidado al interior de los hogares.  Asimismo se reitera que este relevamiento se llevo a cabo en la Ciudad Autónoma de Buenos Aires en el año 2016 y se toma como unidad de medida las horas requeridas para llevar a cabo tales tareas. En virtud de ello, se presenta a continuación algunos datos que permiten conocer dicha distribución:
 
 ```{r}
 usodeltiempo |> 
@@ -171,9 +172,9 @@ usodeltiempo |>
 
 ```
 
-El tabulado anterior expresa información más acertada en relación a la distribución de las tareas de cuidado.  En efecto, en promedio las mujeres destinan mayor carga horaria en las tareas de cuidado de personas, 5,8  frente a 3,7 horas de los varones. 
-No obstante, se reiterar la aclaración  que no fueron tenidos en cuenta los casos que tienen valor "0" en esa variable y que dichos casos  representan 1801 de 2336 observaciones, reduciendo considerablemente la muestra tomada.  
-Por ello, resulta importante complementar la información obtenida con otros análisis para tener una mirada de mayor integralidad. 
+El tabulado anterior expresa información más acertada en relación a la distribución de las tareas de cuidado.  En efecto, en promedio las mujeres encuestadas destinan mayor carga horaria en las tareas de cuidado de personas, 5,8  frente a 3,7 horas de los varones. 
+No obstante, se reitera la aclaración  que no fueron tenidos en cuenta los casos que tienen valor "0" en esa variable y que dichos casos  representan 1801 de 2336 observaciones, reduciendo considerablemente la muestra de donde se extrajo esa información.  
+Por ello, resulta importante complementar los datos obtenidos con otros análisis para tener una mirada de mayor integralidad. 
 
 De hecho, si se toman la cantidad de horas dedidacas al trabajo doméstico no pago según sexo, se visualiza la siguiente relación:
 
@@ -199,7 +200,7 @@ usodeltiempo |>
 ```
 
 
-Se si analizan los datos vinculados a la carga horaria destinada a labores de voluntarias y las de trabajo remunerado se obtiene la siguiente información:
+Si se analizan los datos vinculados a la carga horaria destinada a labores  voluntarias y las de trabajo remunerado se obtiene la siguiente información:
 
 
 
@@ -225,7 +226,7 @@ usodeltiempo |>
 
 ```
 
-Tanto en las hs destinadas al trabajo remunerado como a las actividades voluntarias, se observa nuevamente la mayoria de observaciones bajo el valor cero.  Por ello, se toma la misma decisión anteriormente expresada. 
+Tanto en las horass destinadas al trabajo remunerado como a las actividades voluntarias, se observa nuevamente la mayoria de observaciones bajo el valor cero.  Por ello, se toma la misma decisión anteriormente expresada. 
 
 
 ```{r}
@@ -248,7 +249,7 @@ usodeltiempo |>
   summarise(tiempo_prom_pago = mean(trabajo_pago, na.rm = TRUE)) 
 
 ```
-De acuerdo a la información precedente,  no se observan diferencias significativas en relación a la distribución por sexo. 
+De acuerdo a la información precedente,  no se observan diferencias significativas en relación a la distribución por sexo en cuanto al tiempo promedio de horas dedicadas al trabajo remunerado y labores voluntarias. 
 
 Concretamente en relación a los datos, se considera que la información presentada resulta útil para visualizar las diferencias en cuanto a la distribuciones de las tareas vinculadas a la economía del cuidado, pero es igual de importante explicitar cuáles fueron las decisiones que se fueron tomando durante el procesamiento de la información para realizar dichas conclusiones. 
 
@@ -296,7 +297,7 @@ A modo de hipótesis, es posible plantear los siguientes interrogantes:
 La brecha en la distribución de las tareas de cuidado en relación al sexo se redujo en los últimos diez años? (se prevee tomar en cuenta el dataset de 2005)
 
 
-Las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado que las que trabajan menos horas?  Esta relación se mantiene para el caso de los varones?
+Las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones?
 
 
 
