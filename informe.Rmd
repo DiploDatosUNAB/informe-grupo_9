@@ -8,6 +8,12 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Cargar los paquetes necesarios acá
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+
 ```
 
 
@@ -19,14 +25,6 @@ Concretamente en relación al dataset, expresa la cantidad de horas diarias que 
 
 ## Exploración de los datos
 
-```{r}
-library(readr)
-library(dplyr)
-
-
-```
-
-**Estructura de  los datos**
 ```{r}
 usodeltiempo <- read_csv("datos/encuesta_uso_tiempo_2016.csv")
 
@@ -117,7 +115,7 @@ usodeltiempo |>
 
 ```
 
-Resulta extraño que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Quizá sea un error de procesamiento (o un error mío de comprensión).
+Resulta extraño que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Se hizo una consulta al area de Estadísticas del Gobierno de la Ciudad de Buenos Aires y admitieron el error. 
 
 ```{r}
 usodeltiempo |> 
@@ -292,6 +290,70 @@ ggplot(aes(sexo, tiempo_prom_dom_nopag)) +
 A modo de hipótesis, es posible plantear los siguientes interrogantes:
 
 ¿Las mujeres jóvenes destinan en promedio mayor carga horaria a las tareas de cuidado que las mujeres adultas?¿y en relación al trabajo en el hogar no remunerado?
+
+```{r}
+usodeltiempo |>
+  group_by(rango_etario) |>
+   filter(tareas_cuidados >0)|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+
+
+```
+
+En cuanto a la distribución general, la relación entre rango etario y promedio de horas destinadas a las tareas de cuidado se visualiza en forma más clara para las personas entre 25 y 39 años. Este intervalo etario se corresponde en la edad más comun para tener hijes (ver estadistica en ciudad).  Se presenta a continuación la información diferennciada por sexo. 
+
+```{r}
+ usodeltiempo |>
+group_by(rango_etario) |>
+   filter(tareas_cuidados >0,  sexo == "Mujer")|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+
+```
+
+
+Para las mujeres, las edades (....)
+Se presenta a continuación de los varones
+
+```{r}
+usodeltiempo |>
+group_by(rango_etario) |>
+   filter(tareas_cuidados >0,  sexo == "Varon")|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+
+
+
+
+```
+
+mismas relaciones trabajo domestico
+
+```{r}
+usodeltiempo|>
+  group_by(rango_etario) |>
+   filter(trabajo_domestico_no_pago >0,  sexo == "Mujer")|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+
+
+
+```
+varones
+
+
+
+```{r}
+usodeltiempo |>
+  group_by(rango_etario) |>
+   filter(trabajo_domestico_no_pago > 0,  sexo == "Varon") |>
+     summarise(prom_trabnopag = mean (trabajo_domestico_no_pago , na.rm = TRUE))
+
+
+
+
+
+```
+
+
+
 
 
 La brecha en la distribución de las tareas de cuidado en relación al sexo se redujo en los últimos diez años? (se prevee tomar en cuenta el dataset de 2005)
