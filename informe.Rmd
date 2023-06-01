@@ -1,5 +1,5 @@
 ---
-title: "TP_1"
+title: "TP_2"
 author: "Alina Lopez"
 output: html_document
 ---
@@ -352,16 +352,61 @@ usodeltiempo |>
 
 ```
 
+Respecto a la relación entre las horas trabajadas para el mercado laboral y las horas destinadas a las tareas de cuidado, ¿las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado de personas que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones? ¿y respecto a las tareas de cuidado de hogar?
+```{r}
+
+usodeltiempo |> 
+filter(sexo== "Mujer")  |> 
+  ggplot(aes(trabajo_pago, tareas_cuidados)) +
+  geom_point()
 
 
 
 
-La brecha en la distribución de las tareas de cuidado en relación al sexo se redujo en los últimos diez años? (se prevee tomar en cuenta el dataset de 2005)
+```
 
 
-Las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones?
+varones:
+
+```{r}
+
+usodeltiempo |> 
+filter(sexo== "Varon")  |> 
+  ggplot(aes(trabajo_pago, tareas_cuidados)) +
+  geom_point()
 
 
 
 
+```
+
+cuidado hogar
+
+
+```{r}
+usodeltiempo |> 
+filter(sexo== "Mujer")  |> 
+  ggplot(aes(trabajo_pago, trabajo_domestico_no_pago)) +
+  geom_point()
+
+
+
+
+```
+
+varones
+
+
+```{r}
+
+
+usodeltiempo |> 
+filter(sexo== "Varon")  |> 
+  ggplot(aes(trabajo_pago, trabajo_domestico_no_pago)) +
+  geom_point()
+
+
+
+
+```
 
