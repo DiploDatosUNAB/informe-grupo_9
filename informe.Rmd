@@ -47,7 +47,10 @@ usodeltiempo |>
 
 
 ```
-Tal como lo muestra la información precedente, la población encuestada se compone de 1345 mujeres y 991 varones. 
+Tal como lo muestra la información precedente, la población encuestada se compone de 1345 mujeres y 991 varones. De acuerdo a la información publicada en el Anuario Estadístico de la Ciudad de Buenos Aires de 2016 -el mismo año que se realizó la encuesta uso del tiempo- la población total ascendía a 3.059.122 habitantes, de los cuales 1.430.531 eran varones y 1.628.591 eran mujeres (vease https://www.estadisticaciudad.gob.ar/eyc/wp-content/uploads/2017/10/anuario_estadistico_2016.pdf cuadro 1.9)
+
+
+Si se toma como parámetro de comparación la tasa de masculinidad que consiste en dividir la cantidad de varones sobre la cantidad de mujeres, se obtiene que para los casos contemplados en el dataset de uso del tiempo es de 73,68%; mientras que para la población total es de 87,83%.  Es decir, en cuanto a la relación con la población total de la ciudad, la muestra está sesgada al tener una proporción mayor de mujeres.   
 
 **Distribución por nivel educativo**
 
@@ -287,8 +290,11 @@ ggplot(aes(sexo, tiempo_prom_dom_nopag)) +
 
 ## Hipótesis
 
+
+
 A modo de hipótesis, es posible plantear los siguientes interrogantes:
 
+**Hipótesis 1**
 ¿Las mujeres jóvenes destinan en promedio mayor carga horaria a las tareas de cuidado que las mujeres adultas?¿y en relación al trabajo en el hogar no remunerado?
 
 ```{r}
@@ -300,7 +306,7 @@ usodeltiempo |>
 
 ```
 
-En cuanto a la distribución general, la relación entre rango etario y promedio de horas destinadas a las tareas de cuidado se visualiza en forma más clara para las personas entre 25 y 39 años. Este intervalo etario se corresponde en la edad más comun para tener hijes (ver estadistica en ciudad).  Se presenta a continuación la información diferennciada por sexo. 
+En cuanto a la distribución general, la relación entre rango etario y promedio de horas destinadas a las tareas de cuidado se visualiza en forma más clara para las personas entre 25 y 39 años.  Se presenta a continuación la información diferennciada por sexo. 
 
 ```{r}
  usodeltiempo |>
@@ -311,8 +317,9 @@ group_by(rango_etario) |>
 ```
 
 
-Para las mujeres, las edades (....)
-Se presenta a continuación de los varones
+Las mujeres de 25 a 39 años son las que destinan en promedio la mayor cantidad de horas para tareas de cuidado de personas.  Este rango etario se corresponde con la tasa de fecundidad.  En efecto, en la Ciudad de Buenos Aires es de 94,4 por mil (vease Anuario Estadístico Ciudad de Buenos Aires,  cuadro 2.23).
+
+Se presenta a continuación los resultados para  los varones
 
 ```{r}
 usodeltiempo |>
@@ -325,7 +332,9 @@ group_by(rango_etario) |>
 
 ```
 
-mismas relaciones trabajo domestico
+A diferencia de las mujeres, los varones destinan en promedio mayor cantidad de horas a las tareas de cuidado de personas cuanto mayor es la edad.  
+
+Seguidamente se presenta la información referida a las tareas de trabajo doméstico por rango etario según sexo. 
 
 ```{r}
 usodeltiempo|>
@@ -336,8 +345,8 @@ usodeltiempo|>
 
 
 ```
-varones
 
+Al igual que en las tareas de cuidado de persona, el rango etario donde las mujeres destinan en promedio mayor carga horaria es de 25 a 39 años.  Se presenta más abajo los datos para los varones:
 
 
 ```{r}
@@ -351,6 +360,13 @@ usodeltiempo |>
 
 
 ```
+
+Salvo para el rango etario más joven, en el caso de los varones no expresan diferencias significativas vinculadas a las horas destinadas a las tareas de trabajo doméstico.  
+
+A modo de conclusión, conforme a los datos presentados, es posible enunciar que existe una clara relación entre edad y tareas de cuidados de personas para las mujeres. A su vez, el rango etario que las mujeres mayormente destinan en promedio de horas al cuidado de personas se corresponde con la tasa de fecundidad. Dicha situación permite reflexionar acerca de como   las tareas de cuidado son impulsadas y reforzadas por los estereotipos tradicionales de genéro.  
+
+
+**Hipótesis 2**
 
 Respecto a la relación entre las horas trabajadas para el mercado laboral y las horas destinadas a las tareas de cuidado, ¿las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado de personas que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones? ¿y respecto a las tareas de cuidado de hogar?
 ```{r}
