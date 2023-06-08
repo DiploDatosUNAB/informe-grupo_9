@@ -18,7 +18,7 @@ library(ggplot2)
 
 
 ## Introducción
-El presente informe utiliza como fuente de datos el dataset elaborado por el Gobierno de la Ciudad de Buenos Aires  referido a la encuesta de uso del tiempo.  Conforme a la publicación oficial,  esta encuesta capta información que permite aproximar a la dimensión de la economía del cuidado y servir de base para la estimación del valor económico del trabajo no remunerado. 
+El presente documento utiliza como fuente de información primaria el dataset elaborado por el Gobierno de la Ciudad de Buenos Aires  referido a la encuesta de uso del tiempo.  Conforme a la publicación oficial,  esta encuesta capta información que permite aproximar a la dimensión de la economía del cuidado y servir de base para la estimación del valor económico del trabajo no remunerado. 
 Concretamente en relación al dataset, expresa la cantidad de horas diarias que los y las habitantes de la Ciudad de Buenos Aires le dedican a diferentes actividades, entre ellas: trabajo remunerado; labores domésticas; cuidado de niños, niñas; entre otros en el período 2016.  Es importante resaltar que los datos son de carácter público lo que redunda en la obtención de información de calidad y pertinencia conforme a la población objetivo.  
 
 
@@ -118,7 +118,7 @@ usodeltiempo |>
 
 ```
 
-Resulta extraño que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Se hizo una consulta al area de Estadísticas del Gobierno de la Ciudad de Buenos Aires y admitieron el error. 
+Resulta extraño que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  A tal efecto, se realizó una consulta al area de Estadísticas del Gobierno de la Ciudad de Buenos Aires y admitieron el error en la muestra. No obstante al momento de elaboración del presente documento, la base disponible sigue conteniendo el mismo error.  Por ello, se desestima la caracterización referida al nivel socioeconómico de los hogares.
 
 ```{r}
 usodeltiempo |> 
@@ -161,7 +161,13 @@ usodeltiempo |>
 
 ```
 
-Conforme a la información precedente, se observa que la abrumdora mayoria de observaciones están en el valor "0", lo que redunda en una significativa reducción del promedio.  Esta situación puede deberse a que no se tiene el dato;  o bien que la persona respondió que no le dedica horas a las tareas de cuidados. Frente a esta situación,  una alternativa posible es tomar los datos mayores a ese valor para observar si se obtiene un resultado diferente:
+Conforme a la información precedente, se observa que la abrumadora mayoria de observaciones están en el valor "0", lo que redunda en una significativa reducción del promedio.  Esta situación puede deberse a:
+
+a.  no se tiene el dato de referencia.
+b. la persona encuestada no tiene otras personas a cargo al momento que le realizaron la encuesta.
+c. la persona respondió que no le dedica horas a las tareas de cuidados. 
+
+En relación al punto b, no hay en la base información que permita discriminar a las personas que tienen otras personas a cargo de las que no.  Por ello,  una alternativa posible es tomar los datos mayores a ese valor para observar si se obtiene un resultado diferente:
 
 ```{r}
 usodeltiempo |> 
@@ -363,12 +369,18 @@ usodeltiempo |>
 
 Salvo para el rango etario más joven, en el caso de los varones no expresan diferencias significativas vinculadas a las horas destinadas a las tareas de trabajo doméstico.  
 
-A modo de conclusión, conforme a los datos presentados, es posible enunciar que existe una clara relación entre edad y tareas de cuidados de personas para las mujeres. A su vez, el rango etario que las mujeres mayormente destinan en promedio de horas al cuidado de personas se corresponde con la tasa de fecundidad. Dicha situación permite reflexionar acerca de como   las tareas de cuidado son impulsadas y reforzadas por los estereotipos tradicionales de genéro.  
+A modo de conclusión, conforme a los datos presentados, es posible enunciar que existe una clara relación entre edad y tareas de cuidados de personas para las mujeres. A su vez, el rango etario que las mujeres mayormente destinan en promedio de horas al cuidado de personas se corresponde con la tasa de fecundidad. Dicha situación permite reflexionar acerca de la incidencia de los estereotipos tradicionales de género en las distribución d las tareas de cuidado.  Se presenta a continuación interrogantes adicionales para complementar la reflexión. 
 
 
 **Hipótesis 2**
 
-Respecto a la relación entre las horas trabajadas para el mercado laboral y las horas destinadas a las tareas de cuidado, ¿las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado de personas que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones? ¿y respecto a las tareas de cuidado de hogar?
+Otro de las preguntas surgidas a partir de la exploración de datos gravita en la relación entre las horas trabajadas para el mercado laboral y las horas destinadas a las tareas de cuidado. Es decir,  ¿las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado de personas que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones? 
+
+En virtud de los interrogantes antes mencionados, se grafican a continuación dichas relaciones:
+
+2.1. Relación entre trabajo pago y tareas de cuidados para las mujeres:
+
+
 ```{r}
 
 usodeltiempo |> 
@@ -381,8 +393,18 @@ filter(sexo== "Mujer")  |>
 
 ```
 
+Si  bien la cantidad de casos en valor "0" tanto para las horas trabajadas fuera del hogar como para las destinadas a las tareas de cuidados es notable, se visualiza cierta concentración de casos cuanto mayor son las hs destinadas al trabajo pago y menores las destinadas a las tareas de cuidado.  Esta situación puede deberse a:
 
-varones:
+a. Las mujeres que destinan mayor carga horaria a trabajar para el mercado viven en hogares con una distribución compartida de tareas de cuidado.  Esto puede deberse a que cuentan con recursos económicos que les permiten contratar a terceras personas o espacios que brindan esos cuidados o bien porque hay una redistribución equitativa de las tareas de cuidado al interior de la configuración familiar. 
+
+b. Asimismo, como contrapartida de esta situación, las mujeres que destinar mayores horas al cuidado de personas son quienes menos horas pueden trabajar para el mercado. Esta situación habilita a reflexionar acerca la existencia de obstáculos de incidencia  en las trayectorias laborales de las mujeres a raiz del desempeño de tareas de cuidado de personas. 
+
+
+
+2.2. Relación entre trabajo pago y tareas de cuidados para los varones:
+
+
+
 
 ```{r}
 
@@ -396,33 +418,16 @@ filter(sexo== "Varon")  |>
 
 ```
 
-cuidado hogar
+A diferencia de las mujeres, no parece visualizarse una relación muy afin entre las horas destinadas al mercado y las horas destinadas a las tareas de cuidado. La concentración de casos de visualiza en el rango de 5 a 10 hs de trabajo pago y en el valor "0" para las tareas de cuidado. 
 
 
-```{r}
-usodeltiempo |> 
-filter(sexo== "Mujer")  |> 
-  ggplot(aes(trabajo_pago, trabajo_domestico_no_pago)) +
-  geom_point()
+**Algunas consideraciones finales**
 
+los interrogantes formulados se desarrollaron con el propósito de reflexionar sobre la desigual distribución de las tareas de cuidado de personas y hogares para hombres y mujeres.  El análisis de los datos encontrados permite   dar cuenta de la incidencia de estereotipos tradicionales de género que estructuran la división sexual trabajo asignando tareas para varones y mujeres.  Dichas labores resultan claramente diferenciadas y   gravitan en el uso de sus tiempos. No obstante es importante señalar que dicha información brinda una respuesta parcial a la problemática que debiera ser complementada por otros recursos.  
 
+Para finalizar y saliendo un poco de la formalidad de la presentación del trabajo quiero expresar que la tareas de realizar este documento me resultaron sumamente satisfactorias y estimulantes.  Respaldar las reflexiones con datos es de importancia vital para la producción de información de calidad.
 
+gracias!!!
+ 
 
-```
-
-varones
-
-
-```{r}
-
-
-usodeltiempo |> 
-filter(sexo== "Varon")  |> 
-  ggplot(aes(trabajo_pago, trabajo_domestico_no_pago)) +
-  geom_point()
-
-
-
-
-```
 
