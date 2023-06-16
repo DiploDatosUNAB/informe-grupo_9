@@ -346,13 +346,13 @@ Seguidamente se presenta la información referida a las tareas de trabajo domés
 usodeltiempo|>
   group_by(rango_etario) |>
    filter(trabajo_domestico_no_pago >0,  sexo == "Mujer")|>
-  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+  summarise(tiempo_prom_nopag = mean(trabajo_domestico_no_pago, na.rm = TRUE))
 
 
 
 ```
 
-Al igual que en las tareas de cuidado de persona, el rango etario donde las mujeres destinan en promedio mayor carga horaria es de 25 a 39 años.  Se presenta más abajo los datos para los varones:
+A diferencia de  las tareas de cuidado de persona, el rango etario donde las mujeres destinan en promedio mayor carga horaria es a partir de los 65  años.  Se presenta más abajo los datos para los varones:
 
 
 ```{r}
@@ -425,9 +425,6 @@ A diferencia de las mujeres, no parece visualizarse una relación muy afin entre
 
 los interrogantes formulados se desarrollaron con el propósito de reflexionar sobre la desigual distribución de las tareas de cuidado de personas y hogares para hombres y mujeres.  El análisis de los datos encontrados permite   dar cuenta de la incidencia de estereotipos tradicionales de género que estructuran la división sexual trabajo asignando tareas para varones y mujeres.  Dichas labores resultan claramente diferenciadas y   gravitan en el uso de sus tiempos. No obstante es importante señalar que dicha información brinda una respuesta parcial a la problemática que debiera ser complementada por otros recursos.  
 
-Para finalizar y saliendo un poco de la formalidad de la presentación del trabajo quiero expresar que la tareas de realizar este documento me resultaron sumamente satisfactorias y estimulantes.  Respaldar las reflexiones con datos es de importancia vital para la producción de información de calidad.
 
-gracias!!!
- 
 
 

@@ -782,18 +782,18 @@ trabajo doméstico por rango etario según sexo.</p>
 <pre class="r"><code>usodeltiempo|&gt;
   group_by(rango_etario) |&gt;
    filter(trabajo_domestico_no_pago &gt;0,  sexo == &quot;Mujer&quot;)|&gt;
-  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))</code></pre>
+  summarise(tiempo_prom_nopag = mean(trabajo_domestico_no_pago, na.rm = TRUE))</code></pre>
 <pre><code>## # A tibble: 5 × 2
-##   rango_etario tiempo_prom_cuid
-##   &lt;chr&gt;                   &lt;dbl&gt;
-## 1 14-24                   1.19 
-## 2 25-39                   3.42 
-## 3 40-49                   2.86 
-## 4 50-64                   0.526
-## 5 65+                     0.217</code></pre>
-<p>Al igual que en las tareas de cuidado de persona, el rango etario
-donde las mujeres destinan en promedio mayor carga horaria es de 25 a 39
-años. Se presenta más abajo los datos para los varones:</p>
+##   rango_etario tiempo_prom_nopag
+##   &lt;chr&gt;                    &lt;dbl&gt;
+## 1 14-24                     1.70
+## 2 25-39                     2.87
+## 3 40-49                     3.37
+## 4 50-64                     3.70
+## 5 65+                       4.31</code></pre>
+<p>A diferencia de las tareas de cuidado de persona, el rango etario
+donde las mujeres destinan en promedio mayor carga horaria es a partir
+de los 65 años. Se presenta más abajo los datos para los varones:</p>
 <pre class="r"><code>usodeltiempo |&gt;
   group_by(rango_etario) |&gt;
    filter(trabajo_domestico_no_pago &gt; 0,  sexo == &quot;Varon&quot;) |&gt;
@@ -877,12 +877,6 @@ claramente diferenciadas y gravitan en el uso de sus tiempos. No
 obstante es importante señalar que dicha información brinda una
 respuesta parcial a la problemática que debiera ser complementada por
 otros recursos.</p>
-<p>Para finalizar y saliendo un poco de la formalidad de la presentación
-del trabajo quiero expresar que la tareas de realizar este documento me
-resultaron sumamente satisfactorias y estimulantes. Respaldar las
-reflexiones con datos es de importancia vital para la producción de
-información de calidad.</p>
-<p>gracias!!!</p>
 </div>
 
 
