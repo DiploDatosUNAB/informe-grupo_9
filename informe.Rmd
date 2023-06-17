@@ -1,5 +1,5 @@
 ---
-title: "TP_1"
+title: "TP_2"
 author: "Alina Lopez"
 output: html_document
 ---
@@ -8,25 +8,23 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Cargar los paquetes necesarios acá
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+
 ```
 
 
 ## Introducción
-El presente informe utiliza como fuente de datos el dataset elaborado por el Gobierno de la Ciudad de Buenos Aires  referido a la encuesta de uso del tiempo.  Conforme a la publicación oficial,  esta encuesta capta información que permite aproximar a la dimensión de la economía del cuidado y servir de base para la estimación del valor económico del trabajo no remunerado. 
+El presente documento utiliza como fuente de información primaria el dataset elaborado por el Gobierno de la Ciudad de Buenos Aires  referido a la encuesta de uso del tiempo.  Conforme a la publicación oficial,  esta encuesta capta información que permite aproximar a la dimensión de la economía del cuidado y servir de base para la estimación del valor económico del trabajo no remunerado. 
 Concretamente en relación al dataset, expresa la cantidad de horas diarias que los y las habitantes de la Ciudad de Buenos Aires le dedican a diferentes actividades, entre ellas: trabajo remunerado; labores domésticas; cuidado de niños, niñas; entre otros en el período 2016.  Es importante resaltar que los datos son de carácter público lo que redunda en la obtención de información de calidad y pertinencia conforme a la población objetivo.  
 
 
 
 ## Exploración de los datos
 
-```{r}
-library(readr)
-library(dplyr)
-
-
-```
-
-**Estructura de  los datos**
 ```{r}
 usodeltiempo <- read_csv("datos/encuesta_uso_tiempo_2016.csv")
 
@@ -49,7 +47,10 @@ usodeltiempo |>
 
 
 ```
-Tal como lo muestra la información precedente, la población encuestada se compone de 1345 mujeres y 991 varones. 
+Tal como lo muestra la información precedente, la población encuestada se compone de 1345 mujeres y 991 varones. De acuerdo a la información publicada en el Anuario Estadístico de la Ciudad de Buenos Aires de 2016 -el mismo año que se realizó la encuesta uso del tiempo- la población total ascendía a 3.059.122 habitantes, de los cuales 1.430.531 eran varones y 1.628.591 eran mujeres (vease https://www.estadisticaciudad.gob.ar/eyc/wp-content/uploads/2017/10/anuario_estadistico_2016.pdf cuadro 1.9)
+
+
+Si se toma como parámetro de comparación la tasa de masculinidad que consiste en dividir la cantidad de varones sobre la cantidad de mujeres, se obtiene que para los casos contemplados en el dataset de uso del tiempo es de 73,68%; mientras que para la población total es de 87,83%.  Es decir, en cuanto a la relación con la población total de la ciudad, la muestra está sesgada al tener una proporción mayor de mujeres.   
 
 **Distribución por nivel educativo**
 
@@ -117,7 +118,7 @@ usodeltiempo |>
 
 ```
 
-Resulta extraño que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  Quizá sea un error de procesamiento (o un error mío de comprensión).
+Resulta extraño que todas las personas encuestadas manifiestan tener ingresos que refieren al quinto quintil.  A tal efecto, se realizó una consulta al area de Estadísticas del Gobierno de la Ciudad de Buenos Aires y admitieron el error en la muestra. No obstante al momento de elaboración del presente documento, la base disponible sigue conteniendo el mismo error.  Por ello, se desestima la caracterización referida al nivel socioeconómico de los hogares.
 
 ```{r}
 usodeltiempo |> 
@@ -160,7 +161,13 @@ usodeltiempo |>
 
 ```
 
-Conforme a la información precedente, se observa que la abrumdora mayoria de observaciones están en el valor "0", lo que redunda en una significativa reducción del promedio.  Esta situación puede deberse a que no se tiene el dato;  o bien que la persona respondió que no le dedica horas a las tareas de cuidados. Frente a esta situación,  una alternativa posible es tomar los datos mayores a ese valor para observar si se obtiene un resultado diferente:
+Conforme a la información precedente, se observa que la abrumadora mayoria de observaciones están en el valor "0", lo que redunda en una significativa reducción del promedio.  Esta situación puede deberse a:
+
+a.  no se tiene el dato de referencia.
+b. la persona encuestada no tiene otras personas a cargo al momento que le realizaron la encuesta.
+c. la persona respondió que no le dedica horas a las tareas de cuidados. 
+
+En relación al punto b, no hay en la base información que permita discriminar a las personas que tienen otras personas a cargo de las que no.  Por ello,  una alternativa posible es tomar los datos mayores a ese valor para observar si se obtiene un resultado diferente:
 
 ```{r}
 usodeltiempo |> 
@@ -289,16 +296,134 @@ ggplot(aes(sexo, tiempo_prom_dom_nopag)) +
 
 ## Hipótesis
 
+
+
 A modo de hipótesis, es posible plantear los siguientes interrogantes:
 
+**Hipótesis 1**
 ¿Las mujeres jóvenes destinan en promedio mayor carga horaria a las tareas de cuidado que las mujeres adultas?¿y en relación al trabajo en el hogar no remunerado?
 
+```{r}
+usodeltiempo |>
+  group_by(rango_etario) |>
+   filter(tareas_cuidados >0)|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
 
-La brecha en la distribución de las tareas de cuidado en relación al sexo se redujo en los últimos diez años? (se prevee tomar en cuenta el dataset de 2005)
+
+```
+
+En cuanto a la distribución general, la relación entre rango etario y promedio de horas destinadas a las tareas de cuidado se visualiza en forma más clara para las personas entre 25 y 39 años.  Se presenta a continuación la información diferennciada por sexo. 
+
+```{r}
+ usodeltiempo |>
+group_by(rango_etario) |>
+   filter(tareas_cuidados >0,  sexo == "Mujer")|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+
+```
 
 
-Las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones?
+Las mujeres de 25 a 39 años son las que destinan en promedio la mayor cantidad de horas para tareas de cuidado de personas.  Este rango etario se corresponde con la tasa de fecundidad.  En efecto, en la Ciudad de Buenos Aires es de 94,4 por mil (vease Anuario Estadístico Ciudad de Buenos Aires,  cuadro 2.23).
 
+Se presenta a continuación los resultados para  los varones
+
+```{r}
+usodeltiempo |>
+group_by(rango_etario) |>
+   filter(tareas_cuidados >0,  sexo == "Varon")|>
+  summarise(tiempo_prom_cuid = mean(tareas_cuidados, na.rm = TRUE))
+
+
+
+
+```
+
+A diferencia de las mujeres, los varones destinan en promedio mayor cantidad de horas a las tareas de cuidado de personas cuanto mayor es la edad.  
+
+Seguidamente se presenta la información referida a las tareas de trabajo doméstico por rango etario según sexo. 
+
+```{r}
+usodeltiempo|>
+  group_by(rango_etario) |>
+   filter(trabajo_domestico_no_pago >0,  sexo == "Mujer")|>
+  summarise(tiempo_prom_nopag = mean(trabajo_domestico_no_pago, na.rm = TRUE))
+
+
+
+```
+
+A diferencia de  las tareas de cuidado de persona, el rango etario donde las mujeres destinan en promedio mayor carga horaria es a partir de los 65  años.  Se presenta más abajo los datos para los varones:
+
+
+```{r}
+usodeltiempo |>
+  group_by(rango_etario) |>
+   filter(trabajo_domestico_no_pago > 0,  sexo == "Varon") |>
+     summarise(prom_trabnopag = mean (trabajo_domestico_no_pago , na.rm = TRUE))
+
+
+
+
+
+```
+
+Salvo para el rango etario más joven, en el caso de los varones no expresan diferencias significativas vinculadas a las horas destinadas a las tareas de trabajo doméstico.  
+
+A modo de conclusión, conforme a los datos presentados, es posible enunciar que existe una clara relación entre edad y tareas de cuidados de personas para las mujeres. A su vez, el rango etario que las mujeres mayormente destinan en promedio de horas al cuidado de personas se corresponde con la tasa de fecundidad. Dicha situación permite reflexionar acerca de la incidencia de los estereotipos tradicionales de género en las distribución d las tareas de cuidado.  Se presenta a continuación interrogantes adicionales para complementar la reflexión. 
+
+
+**Hipótesis 2**
+
+Otro de las preguntas surgidas a partir de la exploración de datos gravita en la relación entre las horas trabajadas para el mercado laboral y las horas destinadas a las tareas de cuidado. Es decir,  ¿las mujeres que trabajan mayor cantidad de hs en el mercado destinan menor cantidad de hs a a las tareas de cuidado de personas que las que trabajan menos horas?  ¿Esta relación se mantiene para el caso de los varones? 
+
+En virtud de los interrogantes antes mencionados, se grafican a continuación dichas relaciones:
+
+2.1. Relación entre trabajo pago y tareas de cuidados para las mujeres:
+
+
+```{r}
+
+usodeltiempo |> 
+filter(sexo== "Mujer")  |> 
+  ggplot(aes(trabajo_pago, tareas_cuidados)) +
+  geom_point()
+
+
+
+
+```
+
+Si  bien la cantidad de casos en valor "0" tanto para las horas trabajadas fuera del hogar como para las destinadas a las tareas de cuidados es notable, se visualiza cierta concentración de casos cuanto mayor son las hs destinadas al trabajo pago y menores las destinadas a las tareas de cuidado.  Esta situación puede deberse a:
+
+a. Las mujeres que destinan mayor carga horaria a trabajar para el mercado viven en hogares con una distribución compartida de tareas de cuidado.  Esto puede deberse a que cuentan con recursos económicos que les permiten contratar a terceras personas o espacios que brindan esos cuidados o bien porque hay una redistribución equitativa de las tareas de cuidado al interior de la configuración familiar. 
+
+b. Asimismo, como contrapartida de esta situación, las mujeres que destinar mayores horas al cuidado de personas son quienes menos horas pueden trabajar para el mercado. Esta situación habilita a reflexionar acerca la existencia de obstáculos de incidencia  en las trayectorias laborales de las mujeres a raiz del desempeño de tareas de cuidado de personas. 
+
+
+
+2.2. Relación entre trabajo pago y tareas de cuidados para los varones:
+
+
+
+
+```{r}
+
+usodeltiempo |> 
+filter(sexo== "Varon")  |> 
+  ggplot(aes(trabajo_pago, tareas_cuidados)) +
+  geom_point()
+
+
+
+
+```
+
+A diferencia de las mujeres, no parece visualizarse una relación muy afin entre las horas destinadas al mercado y las horas destinadas a las tareas de cuidado. La concentración de casos de visualiza en el rango de 5 a 10 hs de trabajo pago y en el valor "0" para las tareas de cuidado. 
+
+
+**Algunas consideraciones finales**
+
+los interrogantes formulados se desarrollaron con el propósito de reflexionar sobre la desigual distribución de las tareas de cuidado de personas y hogares para hombres y mujeres.  El análisis de los datos encontrados permite   dar cuenta de la incidencia de estereotipos tradicionales de género que estructuran la división sexual trabajo asignando tareas para varones y mujeres.  Dichas labores resultan claramente diferenciadas y   gravitan en el uso de sus tiempos. No obstante es importante señalar que dicha información brinda una respuesta parcial a la problemática que debiera ser complementada por otros recursos.  
 
 
 
